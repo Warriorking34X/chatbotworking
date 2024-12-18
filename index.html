@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chat-container {
+            width: 500px;
+            height: 600px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        #chat-input {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            font-size: 18px;
+        }
+        #chat-output {
+            width: 100%;
+            height: 500px;
+            padding: 10px;
+            font-size: 18px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <input id="chat-input" type="text" placeholder="Type a message...">
+        <div id="chat-output"></div>
+    </div>
+
+    <script>
+        const chatInput = document.getElementById("chat-input");
+        const chatOutput = document.getElementById("chat-output");
+
+        chatInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                const prompt = chatInput.value;
+                chatInput.value = "";
+                fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: prompt }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const response = data.response;
+                        const chatOutputHtml = `<p>YOU: ${prompt}</p><p>BOT: ${response}</p>`;
+                        chatOutput.innerHTML += chatOutputHtml;
+                        chatOutput.scrollTop = chatOutput.scrollHeight;
+                    })
+                    .catch((error) => console.error(error));
+            }
+        });
+    </script>
+</body>
+</html>
