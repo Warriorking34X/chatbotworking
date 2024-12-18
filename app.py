@@ -5,10 +5,7 @@ import together
 app = Flask(__name__)
 
 # Initialize the Together API
-together_api = together.Together(
-    api_key=os.environ["TOGETHER_API_KEY"],
-    api_secret=os.environ["TOGETHER_API_SECRET"],
-)
+together_api = together.Together(api_key=os.environ["TOGETHER_API_KEY"])
 
 # Define a function to handle chatbot responses
 def handle_response(message):
